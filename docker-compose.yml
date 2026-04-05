@@ -1,0 +1,31 @@
+version: "3.9"
+
+services:
+  env-server:
+    build: .
+    ports:
+      - "7861:7861"
+    environment:
+      PORT: 7861
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7861/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+
+  # Optional: run inference against the server
+  inference:
+    build: .
+    depends_on:
+      env-server:
+        condition: service_healthy
+    environment:
+      SERVER_URL: http://env-server:7861
+      API_BASE_URL: ${API_BASE_URL:-https://router.huggingface.co/v1}
+      MODEL_NAME: ${MODEL_NAME:-Qwen/Qwen2.5-72B-Instruct}
+      HF_TOKEN: ${HF_TOKEN}
+    command: python inference.py
+    profiles:
+      - inference   # only runs with: docker compose --profile inference up

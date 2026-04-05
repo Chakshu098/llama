@@ -1,0 +1,19 @@
+name: "llama-ir"
+version: "1.0.0"
+description: "Advanced Multi-Agent Incident Response Orchestrator for SRE/DevOps."
+author: "Antigravity & User"
+tags: ["openenv", "incident-response", "sre", "multi-agent", "llama"]
+entrypoint: "python server/app.py"
+interface:
+  type: "http"
+  port: 7860
+tasks:
+  - id: "alert-classification"
+    name: "Alert Triage"
+    difficulty: "easy"
+  - id: "root-cause-analysis"
+    name: "Root Cause Diagnosis"
+    difficulty: "medium"
+  - id: "postmortem-writing"
+    name: "Advanced Remediation & Reporting"
+    difficulty: "hard"

@@ -1,0 +1,15 @@
+.venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.env
+.pytest_cache/
+dashboard-v3/node_modules/
+dashboard-v3/dist/
+server.err
+server.log
+*.webp
+debug_reset.py
+rl/
+eval/
+tests/
