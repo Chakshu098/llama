@@ -67,8 +67,10 @@ def list_tasks():
     ]}
 
 @app.post("/reset")
-def reset(req: ResetRequest):
+def reset(req: Optional[ResetRequest] = Body(None)):
     global _env
+    if req is None:
+        req = ResetRequest()
     try:
         _env = IncidentResponseEnv(task_id=req.task_id, scenario_id=req.scenario_id)
         obs = _env.reset()
@@ -77,8 +79,11 @@ def reset(req: ResetRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/step")
-def step(req: StepRequest):
+def step(req: Optional[StepRequest] = Body(None)):
     env = _require_env()
+    if req is None:
+        raise HTTPException(status_code=422, detail="Step request body is required for parameters.")
+    
     try:
         action_type = ActionType(req.action_type)
     except ValueError:
