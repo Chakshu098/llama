@@ -4,11 +4,11 @@ services:
   env-server:
     build: .
     ports:
-      - "7861:7861"
+      - "7860:7860"
     environment:
-      PORT: 7861
+      PORT: 7860
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:7861/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:7860/health"]
       interval: 10s
       timeout: 5s
       retries: 5

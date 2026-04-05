@@ -10,3 +10,5 @@ pytest>=8.2.0
 python-multipart>=0.0.10
 starlette>=0.38.0
 python-dotenv>=1.0.1
+aiofiles>=24.1.0
+huggingface-hub>=0.28.1

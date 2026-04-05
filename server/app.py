@@ -95,7 +95,14 @@ def step(req: StepRequest):
 
 @app.get("/state")
 def state():
-    if _env is None: return {"error": "not initialized"}
+    global _env
+    if _env is None: 
+        # Auto-initialize for demo/visibility purposes
+        try:
+            _env = IncidentResponseEnv(task_id="alert-classification")
+            _env.reset()
+        except Exception:
+            return {"error": "not initialized and auto-reset failed"}
     return _env.state()
 
 @app.post("/thought")
@@ -109,13 +116,22 @@ def record_thought(thought: ThoughtRequest):
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DIST_DIR = os.path.join(BASE_DIR, "dashboard-v3", "dist")
 
+print(f"[*] Command Center Launching...")
+print(f"[*] Root Directory: {BASE_DIR}")
+print(f"[*] Checking for Dashboard at: {DIST_DIR}")
+
 if os.path.exists(DIST_DIR):
-    # Route for assets specifically to avoid 404s
+    print(f"[+] Dashboard found! Serving from: {DIST_DIR}")
+    
+    # Route for assets specifically
     assets_dir = os.path.join(DIST_DIR, "assets")
     if os.path.exists(assets_dir):
+        print(f"[*] Assets directory found at: {assets_dir}")
         app.mount("/assets", StaticFiles(directory=assets_dir), name="assets")
 
-    # Entry point
+    # API routes are already defined above. 
+    # Everything else should serve index.html or the static file.
+
     @app.get("/")
     async def get_index():
         return FileResponse(os.path.join(DIST_DIR, "index.html"))
@@ -126,10 +142,17 @@ if os.path.exists(DIST_DIR):
         # Don't fallback for API calls
         if any(request.url.path.startswith(p) for p in ["/state", "/step", "/reset", "/thought", "/health", "/tasks"]):
             return JSONResponse({"detail": "Not Found"}, status_code=404)
-        return FileResponse(os.path.join(DIST_DIR, "index.html"))
+        
+        index_path = os.path.join(DIST_DIR, "index.html")
+        if os.path.exists(index_path):
+            return FileResponse(index_path)
+        return JSONResponse({"detail": "Dashboard index.html not found"}, status_code=404)
 
-    # Mount remaining root files
+    # Mount remaining root files (must be last)
     app.mount("/", StaticFiles(directory=DIST_DIR, html=True), name="root")
+else:
+    print(f"[!] WARNING: Dashboard directory NOT FOUND at {DIST_DIR}")
+    print(f"[!] Dashboard UI will not be available.")
 
 if __name__ == "__main__":
     import uvicorn

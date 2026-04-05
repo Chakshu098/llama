@@ -13,12 +13,14 @@ from models import AgentRole, ActionType
 load_dotenv()
 
 # ---------------------------------------------------------------------------
-# Configuration
+# Configuration (Strictly aligned with Hackathon requirements)
 # ---------------------------------------------------------------------------
 
-API_KEY      = os.getenv("HF_TOKEN") or os.getenv("API_KEY") or os.getenv("OPENAI_API_KEY")
 API_BASE_URL = os.getenv("API_BASE_URL", "https://api.groq.com/openai/v1")
 MODEL_NAME   = os.getenv("MODEL_NAME", "llama-3.1-8b-instant")
+HF_TOKEN     = os.getenv("HF_TOKEN")
+
+# Internal server URL for local/container coordination
 SERVER_URL   = os.getenv("SERVER_URL", "http://localhost:7860")
 BENCHMARK    = "llama-ir"
 TEMPERATURE  = 0.1
@@ -170,11 +172,11 @@ def run_episode(client: OpenAI, task_id: str):
     log_end(done, step, final_score, episode_rewards)
 
 def main():
-    if not API_KEY:
-        print("[!] Error: HF_TOKEN or API_KEY not found.")
+    if not HF_TOKEN:
+        print("[!] Error: HF_TOKEN not found in environment.")
         return
 
-    client = OpenAI(base_url=API_BASE_URL, api_key=API_KEY)
+    client = OpenAI(base_url=API_BASE_URL, api_key=HF_TOKEN)
     for task in TASKS:
         try:
             run_episode(client, task)

@@ -1,3 +1,19 @@
+---
+title: Llama-IR
+emoji: 🦙
+colorFrom: blue
+colorTo: indigo
+sdk: docker
+app_port: 7860
+pinned: true
+tags:
+  - openenv
+  - incident-response
+  - sre
+  - multi-agent
+  - llama
+---
+
 # Llama-IR: Autonomous SRE Command Center
 
 **Llama-IR** is a high-fidelity, multi-agent incident response system designed for the Meta Hackathon. It leverages a **Supervisor-Specialist** architecture to autonomously triage, investigate, and remediate service outages in complex microservice environments.
