@@ -5,7 +5,6 @@ __pycache__/
 .env
 .pytest_cache/
 dashboard-v3/node_modules/
-dashboard-v3/dist/
 server.err
 server.log
 *.webp
