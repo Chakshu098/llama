@@ -18,8 +18,12 @@ dependencies = [
     "starlette>=0.38.0",
     "python-dotenv>=1.0.1",
     "aiofiles>=24.1.0",
-    "huggingface-hub>=0.28.1"
+    "huggingface-hub>=0.28.1",
+    "openenv-core>=0.2.0"
 ]
+
+[project.scripts]
+server = "server.app:main"
 
 [project.optional-dependencies]
 dev = [

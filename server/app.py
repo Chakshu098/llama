@@ -159,8 +159,11 @@ else:
     print(f"[!] WARNING: Dashboard directory NOT FOUND at {DIST_DIR}")
     print(f"[!] Dashboard UI will not be available.")
 
-if __name__ == "__main__":
+def main():
     import uvicorn
     # Hugging Face Spaces require port 7860
     port = int(os.getenv("PORT", 7860))
     uvicorn.run(app, host="0.0.0.0", port=port)
+
+if __name__ == "__main__":
+    main()
